@@ -12,5 +12,34 @@ The app's backend uses NLP (Natural Language Processing) to standardize question
 Create an UML sequence diagram with participants: **user**, **frontend**, **backend**, **database**, and **ad server**. The **frontend** displays an input form where the user can enter their question. The question is then sent to the **backend**. The diagram should have an **alternative flow** showing paths for when an answer to the question is found in the database or not. If the question is new, it is  saved in the database. Before the **frontend** displays the answer to the question, it exchanges messages with the **ad server** requesting that a new ad be generated. The ad is then displayed with the answer. 
 
 ```
-Copy and paste your solution here! 
+
+@startuml
+
+participant user
+participant frontend
+participant backend
+participant database
+participant "ad server" as adserver
+
+frontend -> user: Show question form
+user -> frontend: Type question
+frontend -> backend: Send question
+
+backend -> backend: Use NLP to standardize question
+backend -> database: Find answer
+database --> backend: Search result
+
+alt Answer found
+    backend --> frontend: Send answer
+else Answer not found
+    backend -> database: Save question
+    backend --> frontend: Hmmm... Let me think about it.\nAsk me again in 24 hours.
+end
+
+frontend -> adserver: Get new ad
+adserver --> frontend: Send ad
+frontend -> user: Show answer and ad
+
+@enduml
+
 ```
